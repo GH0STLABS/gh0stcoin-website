@@ -85,6 +85,16 @@
       <div class="block-hero"><img src="images/logo.png" loading="lazy" alt="">
         <h1 data-w-id="fec0fb7b-303f-09d0-3ce6-40f91d7252a5" style="-webkit-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="heading-hero">$GH0ST</h1>
         <p data-w-id="dcd739db-6d1f-6a52-859b-4a3fd0e20c84" style="-webkit-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="paragraph-large">ATTENTION: Swap module in BETA. Our Metadata not fully supported by JUP api, will display the VALUE WITHOUT DECIMALS.</p>
+        <div id="transactionModal"
+        style="display:none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+            <div
+                style="background-color: #303030; padding: 20px; border: 1px solid #888; width: 36%; text-align: center;">
+                <p style="color: rgb(255, 255, 255);">Transaction successful</p>
+                <button onclick="window.location.reload();">Reload Page</button>
+            </div>
+        </div>
+        </div>
         <div id="integrated-terminal">
         </div>
         <div id="integrated-terminal">
@@ -95,33 +105,36 @@
       <script src="https://terminal.jup.ag/main-v2.js" data-preload></script>
       <script>
           (function () {
-              var oldConsoleLog = console.log;
-              console.log = function () {
-                  var message = '';
-                  var isTransactionSuccess = false;
-                  for (var i = 0; i < arguments.length; i++) {
-                      if (typeof arguments[i] === 'object') {
-                          message += JSON.stringify(arguments[i], null, 2) + ' ';
-                          // Comprobar si el mensaje contiene "outputAmount" y "inputAmount"
-                          if (JSON.stringify(arguments[i]).includes('outputAmount') && JSON.stringify(arguments[i]).includes('inputAmount')) {
-                              isTransactionSuccess = true;
-                          }
-                      } else {
-                          message += arguments[i] + ' ';
-                      }
-                  }
-  
-                  if (!isTransactionSuccess) {
-                      var consoleOutput = document.getElementById('consoleOutput');
-                      if (consoleOutput) {
-                          consoleOutput.innerHTML += message + '<br>';
-                      }
-                  } else {
-                      document.body.innerHTML = '<p style="color: white;">Transaction successful</p><button onclick="window.location.reload();">Reload Page</button>';
-                  }
-                  oldConsoleLog.apply(console, arguments);
-              };
-          })();
+            var oldConsoleLog = console.log;
+            console.log = function () {
+                var message = '';
+                var isTransactionSuccess = false;
+                for (var i = 0; i < arguments.length; i++) {
+                    if (typeof arguments[i] === 'object') {
+                        message += JSON.stringify(arguments[i], null, 2) + ' ';
+                        if (JSON.stringify(arguments[i]).includes('outputAmount') && JSON.stringify(arguments[i]).includes('inputAmount')) {
+                            isTransactionSuccess = true;
+                        }
+                    } else {
+                        message += arguments[i] + ' ';
+                    }
+                }
+                if (!isTransactionSuccess) {
+                    var consoleOutput = document.getElementById('consoleOutput');
+                    if (consoleOutput) {
+                        consoleOutput.innerHTML += message + '<br>';
+                    }
+                } else {
+                    // Mostrar el modal
+                    var modal = document.getElementById('transactionModal');
+                    if (modal) {
+                        modal.style.display = "block";
+                    }
+                }
+
+                oldConsoleLog.apply(console, arguments);
+            };
+        })();
   
           window.Jupiter.init({
               displayMode: "integrated",
