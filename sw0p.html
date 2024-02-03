@@ -143,8 +143,8 @@
               endpoint: "https://mainnet.helius-rpc.com/?api-key=8122f5eb-90fd-42a2-bbe9-28b8564fa3e9",
               strictTokenList: false,
               formProps: {
-                  fixedInputMint: true,
-                  fixedOutputMint: true,
+                  fixedInputMint: false,
+                  fixedOutputMint: false,
                   initialAmount: "0",
                   initialInputMint: "So11111111111111111111111111111111111111112",
                   initialOutputMint: "HbxiDXQxBKMNJqDsTavQE7LVwrTR36wjV2EaYEqUw6qH",
@@ -172,7 +172,7 @@
                   var newTextDiv = document.createElement('div');
                   newTextDiv.className = 'ml-4 mr-2 font-semibold';
                   newTextDiv.setAttribute('translate', 'no');
-                  newTextDiv.textContent = 'Gh0St';
+                  newTextDiv.textContent = 'GH0ST';
   
                   elementDiv.parentNode.replaceChild(newTextDiv, elementDiv);
                   observer.disconnect(); // Detiene el MutationObserver una vez que los elementos se han reemplazado
@@ -232,7 +232,7 @@
               function checkAndChangeSpan() {
                   var spanElement = document.querySelector("#jupiter-terminal > div > div > div > div > div > a");
                   if (spanElement && spanElement.textContent.includes("Jupiter")) {
-                      spanElement.innerHTML = '<a href="https://gh0stc0in.xyz/" target="_blank" rel="noreferrer noopener" class="flex items-center space-x-2"><img src="https://gh0stc0in.xyz/images/logo.png" width="24" height="24" alt="Jupiter aggregator"><span class="font-bold text-sm text-white"><span class="font-bold text-sm text-white">Gh0sw0p</span></span></a>';
+                      spanElement.innerHTML = '<a href="https://gh0stc0in.xyz/" target="_blank" rel="noreferrer noopener" class="flex items-center space-x-2"><img src="https://gh0stc0in.xyz/images/logo.png" width="24" height="24" alt="Jupiter aggregator"><span class="font-bold text-sm text-white"><span class="font-bold text-sm text-white">gh0sw0p</span></span></a>';
                       observer.disconnect(); // Desconectar el observer una vez realizado el cambio
                   }
               }
