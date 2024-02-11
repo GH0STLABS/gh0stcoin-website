@@ -85,84 +85,176 @@
       <div class="block-hero"><img src="images/logo.png" loading="lazy" alt="">
         <h1 data-w-id="fec0fb7b-303f-09d0-3ce6-40f91d7252a5" style="-webkit-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="heading-hero">$GH0ST</h1>
         <p data-w-id="dcd739db-6d1f-6a52-859b-4a3fd0e20c84" style="-webkit-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 15px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="paragraph-large">⚠ Swap module in BETA. Our Metadata is not yet fully supported by the Jupiter swap API.</p>
+        <div id="transactionModal"
+        style="display:none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+            <div
+                style="background-color: 0, 0, 0, 0.5; padding: 20px; border-radius: 100px; width: 36%; text-align: center;">
+                <p style="color: rgb(255, 255, 255);">Transaction successful. You're based af!</p>
+                <button onclick="window.location.reload();">Reload Page</button>
+            </div>
+        </div>
+        </div>
         <div id="integrated-terminal">
           <!-- El componente de Jupiter Terminal se inyectará aquí -->
-        </div>
-      
-        <!-- Añadir el script de Jupiter Terminal -->
-        <script src="https://terminal.jup.ag/main-v2.js" data-preload></script>
-      
-        <script>
-          window.onload = function () {
-            const { PublicKey, Buffer } = solanaWeb3;
-      
-            var api_jup = "NnVKVms2cUVhYVlqWGZ6SktIVnRYWW1NNDg4OUpqUXd5eHlmc3BuTURhRVI="
-            var decodedString = atob(api_jup);
-      
-            const TEST_PLATFORM_FEE_AND_ACCOUNTS = {
-              referralAccount: new PublicKey(
-                decodedString,
-              ),
-              feeBps: 160,
-            };
-      
-            // Valores iniciales de los tokens
-            var inputMint = "So11111111111111111111111111111111111111112";
-            var outputMint = "HbxiDXQxBKMNJqDsTavQE7LVwrTR36wjV2EaYEqUw6qH";
-      
-            // Inicializar Jupiter
-            function initJupiter() {
-      
-              window.Jupiter.init({
-                displayMode: "integrated",
-                integratedTargetId: "integrated-terminal",
-                endpoint: "https://mainnet.helius-rpc.com/?api-key=8295fd4a-ffb0-4c77-ae0a-790d94faaec4",
-                strictTokenList: false,
-                formProps: {
+      </div>
+      <div id="consoleOutput"></div>
+  
+      <!-- Añadir el script de Jupiter Terminal -->
+      <script src="https://terminal.jup.ag/main-v2.js" data-preload></script>
+      <script>
+          (function () {
+              var oldConsoleLog = console.log;
+              console.log = function () {
+                  var message = '';
+                  var isTransactionSuccess = false;
+                  for (var i = 0; i < arguments.length; i++) {
+                      if (typeof arguments[i] === 'object') {
+                          message += JSON.stringify(arguments[i], null, 2) + ' ';
+                          if (JSON.stringify(arguments[i]).includes('outputAmount') && JSON.stringify(arguments[i]).includes('inputAmount')) {
+                              isTransactionSuccess = true;
+                          }
+                      } else {
+                          message += arguments[i] + ' ';
+                      }
+                  }
+  
+                  if (!isTransactionSuccess) {
+                      var consoleOutput = document.getElementById('consoleOutput');
+                      if (consoleOutput) {
+                          consoleOutput.innerHTML += message + '<br>';
+                      }
+                  } else {
+                      // Mostrar el modal
+                      var modal = document.getElementById('transactionModal');
+                      if (modal) {
+                          modal.style.display = "block";
+                      }
+                  }
+  
+                  oldConsoleLog.apply(console, arguments);
+              };
+          })();
+  
+  
+          window.Jupiter.init({
+              displayMode: "integrated",
+              integratedTargetId: "integrated-terminal",
+              endpoint: "https://mainnet.helius-rpc.com/?api-key=8295fd4a-ffb0-4c77-ae0a-790d94faaec4",
+              strictTokenList: false,
+              formProps: {
                   fixedInputMint: true,
                   fixedOutputMint: true,
                   initialAmount: "0",
-                  initialInputMint: inputMint,
-                  initialOutputMint: outputMint,
-                },
-                platformFeeAndAccounts: TEST_PLATFORM_FEE_AND_ACCOUNTS,
-              });
-      
-              function checkAndChangeSpan() {
-                var spanElement = document.querySelector("#jupiter-terminal > div > div > div > div > div > a");
-                if (spanElement && spanElement.textContent.includes("Jupiter")) {
-                  spanElement.innerHTML = '<a href="https://gh0stc0in.xyz/" target="_blank" rel="noreferrer noopener" class="flex items-center space-x-2"><img src="https://gh0stc0in.xyz/images/logo.png" width="24" height="24" alt="Jupiter aggregator"><span class="font-bold text-sm text-white"><span class="font-bold text-sm text-white">Gh0sw0p</span></span></a>';
-                  observer.disconnect(); // Desconectar el observer una vez realizado el cambio
-                }
+                  initialInputMint: "So11111111111111111111111111111111111111112",
+                  initialOutputMint: "HbxiDXQxBKMNJqDsTavQE7LVwrTR36wjV2EaYEqUw6qH",
+              },
+          });
+  
+          // Función para verificar y reemplazar elementos
+          function checkAndReplaceElements() {
+              // Reemplazo del primer elemento (imagen)
+              var elementImg = document.querySelector("#jupiter-terminal > div > div > div > form > div > div.w-full.mt-2.rounded-xl.flex.flex-col.px-2 > div > div:nth-child(3) > div > div > div > div > button > div.h-5.w-5 > div > div");
+              if (elementImg) {
+                  var newImg = document.createElement('img');
+                  newImg.src = 'https://api.degencdn.com/v1/nfts/HbxiDXQxBKMNJqDsTavQE7LVwrTR36wjV2EaYEqUw6qH/image.jpg';
+                  newImg.alt = 'SOL';
+                  newImg.width = 20;
+                  newImg.height = 20;
+                  newImg.className = 'rounded-full overflow-hidden';
+  
+                  elementImg.parentNode.replaceChild(newImg, elementImg);
               }
-      
+  
+              // Reemplazo del segundo elemento (div con texto)
+              var elementDiv = document.querySelector("#jupiter-terminal > div > div > div > form > div > div.w-full.mt-2.rounded-xl.flex.flex-col.px-2 > div > div:nth-child(3) > div > div > div > div > button > div.ml-4.mr-2.font-semibold");
+              if (elementDiv) {
+                  var newTextDiv = document.createElement('div');
+                  newTextDiv.className = 'ml-4 mr-2 font-semibold';
+                  newTextDiv.setAttribute('translate', 'no');
+                  newTextDiv.textContent = 'GH0ST';
+  
+                  elementDiv.parentNode.replaceChild(newTextDiv, elementDiv);
+                  observer.disconnect(); // Detiene el MutationObserver una vez que los elementos se han reemplazado
+              }
+          }
+  
+          // Configuración del observer
+          var observer = new MutationObserver(function (mutations) {
+              mutations.forEach(function (mutation) {
+                  setInterval(checkAndReplaceElements, 2000);
+                  //checkAndReplaceElements();
+              });
+          });
+  
+          // Opciones de configuración del observer (observa cambios en el árbol de hijos)
+          var config = { childList: true, subtree: true };
+  
+          // Comienza a observar el documento
+          observer.observe(document.body, config);
+  
+  
+          function replaceInput() {
+              var originalInput = document.querySelector("#jupiter-terminal > div > div > div > form > div > div.w-full.mt-2.rounded-xl.flex.flex-col.px-2 > div > div:nth-child(3) > div > div > div > div > div > input");
+  
+              // Comprobar si ya se ha creado el nuevo input para evitar duplicados
+              var alreadyReplaced = document.querySelector("#new-input");
+              if (originalInput && !alreadyReplaced) {
+                  // Ocultar el input original
+                  originalInput.style.display = 'none';
+  
+                  // Crear un nuevo input con características similares
+                  var newInput = document.createElement('input');
+                  newInput.type = 'text';
+                  newInput.id = 'new-input'; // Puedes darle un nombre diferente aquí
+                  newInput.className = originalInput.className; // Copia las clases para mantener el estilo
+                  newInput.style.cssText = originalInput.style.cssText; // Copiar estilos in-line
+                  newInput.value = originalInput.value; // Establecer valor multiplicado
+                  newInput.style.display = 'inline-block';
+  
+                  var valueWithoutCommas = originalInput.value.replace(/,/g, '');
+                  var newValue = valueWithoutCommas;
+  
+                  // Insertar el nuevo input después del original
+                  originalInput.parentNode.insertBefore(newInput, originalInput.nextSibling);
+              }
+  
+              // Actualizar el valor del nuevo input basado en el original
+              if (originalInput && alreadyReplaced) {
+                  alreadyReplaced.value = ((originalInput.value.replace(/,/g, '')) / 1e9).toFixed(2);
+                  alreadyReplaced.style.display = 'true';
+              }
+  
+  
+  
+  
+              // Función para verificar y cambiar el contenido del elemento
+              function checkAndChangeSpan() {
+                  var spanElement = document.querySelector("#jupiter-terminal > div > div > div > div > div > a");
+                  if (spanElement && spanElement.textContent.includes("Jupiter")) {
+                      spanElement.innerHTML = '<a href="https://gh0stc0in.xyz/" target="_blank" rel="noreferrer noopener" class="flex items-center space-x-2"><img src="https://gh0stc0in.xyz/images/logo.png" width="24" height="24" alt="Jupiter aggregator"><span class="font-bold text-sm text-white"><span class="font-bold text-sm text-white">gh0sw0p</span></span></a>';
+                      observer.disconnect(); // Desconectar el observer una vez realizado el cambio
+                  }
+              }
+  
               // Configuración del observer
               var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                  checkAndChangeSpan();
-                });
+                  mutations.forEach(function (mutation) {
+                      checkAndChangeSpan();
+                  });
               });
-      
+  
               // Opciones de configuración del observer (observa cambios en el árbol de hijos)
               var config = { childList: true, subtree: true, characterData: true };
-      
+  
               // Comienza a observar el documento
               observer.observe(document.body, config);
-      
-            }
-      
-            // Intercambiar los valores de los tokens e inicializar nuevamente Jupiter
-            function swapTokens() {
-              var temp = inputMint;
-              inputMint = outputMint;
-              outputMint = temp;
-              initJupiter();
-            }
-      
-            // Inicialización inicial de Jupiter
-            initJupiter();
           }
-        </script>
+  
+          // Ejecutar replaceInput cada segundo
+          setInterval(replaceInput, 100);
+  
+      </script>
       </div>
       <div data-w-id="297673ad-47a4-b4b1-8938-0ca16b3d6b41" class="figure-a-hero">
         <div class="figure-block-a-hero">
