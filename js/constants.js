@@ -56,7 +56,7 @@ export const SPL_TOKEN = {
   },
 };
 
-export const ASSHOLE_FEE = 50; // 0.5%, set to 0 to disable platform fees
+export const PLATFORM_FEE = 50; // 0.5%, set to 0 to disable platform fees
 export const COMMITMENT = "confirmed";
 export const DEFAULT_INPUT_TOKEN_SYMBOL = "SOL";
 export const DEFAULT_OUTPUT_TOKEN_SYMBOL = "GH0ST";
