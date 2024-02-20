@@ -1,7 +1,7 @@
 const { VersionedTransaction, Connection, PublicKey } = solanaWeb3;
 
 import {
-  ASSHOLE_FEE,
+  PLATFORM_FEE,
   COMMITMENT,
   DEFAULT_INPUT_TOKEN_SYMBOL,
   DEFAULT_OUTPUT_TOKEN_SYMBOL,
@@ -351,14 +351,14 @@ const swapTokens = () => {
   tokenOutField.classList.add("animation-down");
 };
 
-// Charge (ASSHOLE_FEE / 100) % fee if not trading our own token
+// Charge (PLATFORM_FEE / 100) % fee if not trading our own token
 const updatePlatformFee = async () => {
   if (
     ![inputToken, outputToken].includes(DEFAULT_OUTPUT_TOKEN_SYMBOL) &&
     REFERRAL_ACCOUNT_OUT_TOKENS.includes(outputToken) &&
-    ASSHOLE_FEE
+    PLATFORM_FEE
   ) {
-    platformFeeBps = ASSHOLE_FEE;
+    platformFeeBps = PLATFORM_FEE;
     if (!feeAccountCache[outputToken]) {
       const [feeAccount] = await PublicKey.findProgramAddressSync(
         [

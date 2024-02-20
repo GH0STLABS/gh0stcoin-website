@@ -54,11 +54,6 @@ export const SPL_TOKEN = {
     decimals: 9,
     url: "https://i.ibb.co/1nSXPbS/image-1.png",
   },
-  LUDES: {
-    mint: "Bcayk4y8YB4xRamFZesunDQ13RSDaitxR4QjF1h6aVSN",
-    decimals: 9,
-    url: "https://cryptologos.cc/logos/poocoin-poocoin-logo.png",
-  },
 };
 
 export const ASSHOLE_FEE = 50; // 0.5%, set to 0 to disable platform fees
